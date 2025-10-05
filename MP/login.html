@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — Hackathon Internship Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/script.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">HackathonInternshipPortal</a>
+      <nav class="main-nav">
+        <a href="opportunities.html">Opportunities</a>
+        <a href="register.html">Register</a>
+        <a href="help.html">Help</a>
+      </nav>
+      <button id="themeToggle" class="btn secondary" style="margin-left:1rem;">🌙 Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="container auth-page">
+    <div class="card auth-card">
+      <h2>Sign in</h2>
+      <form id="loginForm" autocomplete="on" method="post" action="/api/auth/login">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="you@example.com" />
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required placeholder="••••••••" />
+        <div class="form-row" style="display: inline-flex; align-items: center;">
+          <input type="checkbox" id="remember" name="remember" style="margin-right:10px; vertical-align: middle;" />
+          <label for="remember" style="margin: 0; vertical-align: middle;">Remember&nbsp;me</label>
+        </div>
+
+        <div style="margin-top: 1em; display: flex; flex-direction: column; gap: 0.5em;">
+          <button class="btn" type="submit">Login</button>
+          <a class="small-link" href="#" style="margin-bottom: 10px;">Forgot password?</a>
+        </div>
+
+        <p class="muted">
+          Don't have an account? <a href="register.html">Register</a>
+        </p>
+
+        <div id="loginMessage" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> HackathonInternshipPortal</small>
+    </div>
+  </footer>
+
+  
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Theme toggle logic
+    const themeToggle = document.getElementById('themeToggle');
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.textContent = '🌙 Dark Mode';
+      }
+      localStorage.setItem('theme', mode);
+    }
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+    setTheme(localStorage.getItem('theme') || 'light');
+
+    // Defer actual network handling to js/script.js
+    // A simple enhancement so the form doesn't cause a full page reload if script.js intercepts it
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      if (window.app && typeof window.app.handleLogin === 'function') {
+        e.preventDefault();
+        await window.app.handleLogin(new FormData(e.target));
+      }
+    });
+  </script>
+</body>
+</html>
