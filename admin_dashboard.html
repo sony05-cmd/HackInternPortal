@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard — Hackathon Internship Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/script.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">HackathonInternshipPortal</a>
+      <nav class="main-nav">
+        <a href="opportunities.html">Public listings</a>
+        <a href="#" id="adminLogout">Logout</a>
+        <a href="help.html">Help</a>
+      </nav>
+      <button id="themeToggle" class="btn secondary" style="margin-left:1rem;">🌙 Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="container admin-dashboard">
+    <div class="grid-3">
+      <section class="card">
+        <h3>Manage Opportunities</h3>
+        <button class="btn" id="createOppBtn">Create new</button>
+        <div id="adminOppList">
+          <p class="muted">Loading opportunities…</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Manage Users</h3>
+        <div id="adminUserList">
+          <p class="muted">Loading users…</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Site Activity</h3>
+        <div id="siteActivity">
+          <p class="muted">Recent actions will appear here.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Simple modal area or forms could be injected by js/script.js -->
+    <div id="adminModal" class="modal hidden" aria-hidden="true"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> HackathonInternshipPortal</small>
+    </div>
+  </footer>
+
+  
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Theme toggle logic
+    const themeToggle = document.getElementById('themeToggle');
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.textContent = '🌙 Dark Mode';
+      }
+      localStorage.setItem('theme', mode);
+    }
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+    setTheme(localStorage.getItem('theme') || 'light');
+
+    document.getElementById('createOppBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.app && typeof window.app.openCreateOpportunity === 'function') {
+        window.app.openCreateOpportunity();
+      }
+    });
+
+    document.getElementById('adminLogout').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.app && typeof window.app.logout === 'function') {
+        window.app.logout();
+      }
+    });
+
+    if (window.app && typeof window.app.initAdmin === 'function') {
+      window.app.initAdmin();
+    }
+  </script>
+</body>
+</html>

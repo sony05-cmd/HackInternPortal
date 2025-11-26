@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hackathon Internship Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/script.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">HackathonInternshipPortal</a>
+      <nav class="main-nav">
+        <a href="opportunities.html">Opportunities</a>
+        <a href="register.html">Register</a>
+        <a href="login.html">Login</a>
+        <a href="help.html">Help</a>
+      </nav>
+      <button id="themeToggle" class="btn secondary" style="margin-left:1rem;">🌙 Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="hero container">
+    <section class="hero-content">
+      <h1>Find internships & hackathon roles that launch careers</h1>
+      <p>Browse curated opportunities, apply directly, and get discovered by recruiters.</p>
+      <div class="cta">
+        <a class="btn" href="opportunities.html">Browse Opportunities</a>
+        <a class="btn secondary" href="register.html">Create account</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <article class="feature">
+        <h3>Curated listings</h3>
+        <p>Only quality roles from participating organizations.</p>
+      </article>
+      <article class="feature">
+        <h3>Fast apply</h3>
+        <p>One profile — apply to many roles quickly.</p>
+      </article>
+      <article class="feature">
+        <h3>Mentorship</h3>
+        <p>Access mentors and resources to level-up your project.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer  class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> HackathonInternshipPortal — Built with ❤</small>
+    </div>
+  </footer>
+
+  <script>
+    // small inline convenience script
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Theme toggle logic
+    const themeToggle = document.getElementById('themeToggle');
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.textContent = '🌙 Dark Mode';
+      }
+      localStorage.setItem('theme', mode);
+    }
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+    // On load, set theme from localStorage or default to light
+    setTheme(localStorage.getItem('theme') || 'light');
+  </script>
+</body>
+</html>

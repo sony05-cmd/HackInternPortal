@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Help & Support - Hackathon Internship Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/script.js"></script>
+  <style>
+    /* ===== HELP PAGE STYLES ===== */
+    .help-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    /* FAQ Accordion */
+    .accordion {
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      margin-bottom: 3rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+    .accordion-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .accordion-header {
+      padding: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      background: var(--card-bg);
+      transition: background 0.3s;
+    }
+   
+    .accordion-body {
+      display: none;
+      padding: 1rem;
+      background: var(--bg);
+    }
+    .accordion-item.active .accordion-body {
+      display: block;
+    }
+
+    /* Contact Form */
+    .contact-form {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    .contact-form label {
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .contact-form button {
+      margin-top: 1rem;
+      background: var(--primary);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+
+    .contact-form button:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Chatbot */
+    .chatbot-button {
+      position: fixed;
+      bottom: 90px; /* lifted upward */
+      right: 25px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .chatbot-button:hover {
+      background: var(--primary-hover);
+      transform: scale(1.05);
+    }
+
+    .chatbot-window {
+      position: fixed;
+      bottom: 160px; /* moved up */
+      right: 25px;
+      width: 320px;
+      max-height: 420px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    .chatbot-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 0.75rem;
+      border-radius: 1rem 1rem 0 0;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .chatbot-messages {
+      flex: 1;
+      padding: 0.75rem;
+      overflow-y: auto;
+      font-size: 0.9rem;
+    }
+
+    .chatbot-input {
+      display: flex;
+      border-top: 1px solid var(--border);
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 0 0 0 1rem;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .chatbot-input button {
+      border: none;
+      padding: 0.5rem 1rem;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 0 0 1rem 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">HackathonInternshipPortal</a>
+      <nav class="main-nav">
+        <a href="opportunities.html">Opportunities</a>
+        <a href="register.html">Register</a>
+        <a href="login.html">Login</a>
+        <a href="help.html">Help</a>
+      </nav>
+      <button id="themeToggle" class="btn secondary" style="margin-left:1rem;">🌙 Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="help-container">
+    <h1>Help & Support</h1>
+
+    <!-- FAQ Section -->
+    <section>
+      <h2>Frequently Asked Questions</h2>
+      <div class="accordion" id="faq">
+        <div class="accordion-item">
+          <div class="accordion-header">How do I create an account?</div>
+          <div class="accordion-body">Click on the “Register” page and fill in your details to sign up.</div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header">How can I apply for a hackathon?</div>
+          <div class="accordion-body">Go to the “Opportunities” section and apply directly from there.</div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header">How do I contact support?</div>
+          <div class="accordion-body">You can message us directly using the contact form below or through the chatbot.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="contact-form">
+      <h2>Contact Support</h2>
+      <form id="supportForm">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" placeholder="Enter your name" required>
+
+        <label for="email">Your Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+
+        <label for="message">Your Message</label>
+        <textarea id="message" rows="4" placeholder="Describe your issue..." required></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
+      <p id="formMsg" style="text-align:center;margin-top:1rem;font-weight:bold;"></p>
+    </section>
+  </main>
+
+  <!-- Chatbot -->
+  <button class="chatbot-button" id="chatbotBtn">&#x1F916;</button>
+  <div class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">AI Assistant</div>
+    <div class="chatbot-messages" id="chatbotMessages">
+      <div><b>Bot:</b> Hi there 👋! How can I assist you today?</div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chatInput" placeholder="Type your message..." />
+      <button id="sendChat">Send</button>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> HackathonInternshipPortal — Built with ❤</small>
+    </div>
+  </footer>
+
+  <script>
+    // Year update
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Accordion toggle
+    document.querySelectorAll(".accordion-header").forEach(header => {
+      header.addEventListener("click", () => {
+        const item = header.parentElement;
+        item.classList.toggle("active");
+      });
+    });
+
+    // Contact form message
+    document.getElementById('supportForm').addEventListener('submit', e => {
+      e.preventDefault();
+      document.getElementById('formMsg').textContent = "✅ Message sent successfully! We'll reach out soon.";
+      e.target.reset();
+    });
+
+    // Chatbot toggle
+    const chatbotBtn = document.getElementById('chatbotBtn');
+    const chatbotWindow = document.getElementById('chatbotWindow');
+    chatbotBtn.addEventListener('click', () => {
+      chatbotWindow.style.display = chatbotWindow.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    // Chatbot logic
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatbotMessages');
+    const sendChat = document.getElementById('sendChat');
+
+    function sendMessage() {
+      const msg = chatInput.value.trim();
+      if (!msg) return;
+      const userMsg = document.createElement('div');
+      userMsg.innerHTML = `<b>You:</b> ${msg}`;
+      chatMessages.appendChild(userMsg);
+      chatInput.value = '';
+
+      const botReply = document.createElement('div');
+      botReply.innerHTML = `<b>Bot:</b> ${getBotReply(msg)}`;
+      chatMessages.appendChild(botReply);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function getBotReply(msg) {
+      msg = msg.toLowerCase();
+      if (msg.includes("hello") || msg.includes("hi")) return "Hello! 😊 How can I help you today?";
+      if (msg.includes("register")) return "To register, click the 'Register' link on the top navigation bar.";
+      if (msg.includes("login")) return "Use your registered email and password on the Login page.";
+      if (msg.includes("apply")) return "Visit the Opportunities page and click on any hackathon or internship to apply.";
+      if (msg.includes("password")) return "Click 'Forgot Password' on the Login page to reset it.";
+      if (msg.includes("contact")) return "You can fill the contact form below or message here — we’ll assist you soon!";
+      if (msg.includes("thank")) return "You're welcome! 😊 Glad I could help.";
+      return "I didn’t quite get that 🤔. Try asking about registration, login, or opportunities.";
+    }
+
+    sendChat.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.textContent = '🌙 Dark Mode';
+      }
+      localStorage.setItem('theme', mode);
+    }
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+    setTheme(localStorage.getItem('theme') || 'light');
+  </script>
+</body>
+</html>
+

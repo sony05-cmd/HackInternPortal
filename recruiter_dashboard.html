@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recruiter Dashboard — Hackathon Internship Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/script.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">HackathonInternshipPortal</a>
+      <nav class="main-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="opportunities.html">Opportunities</a>
+        <a href="recruiter_dashboard.html" class="active">My Postings</a>
+        <button id="logoutBtn" class="btn secondary">Logout</button>
+      </nav>
+      <button id="themeToggle" class="btn secondary" style="margin-left:1rem;">🌙 Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="dashboard-header">
+      <h1>Recruiter Dashboard</h1>
+      <p class="subtitle">Manage your job postings and review applications</p>
+      <button id="createOppBtn" class="btn primary">+ Create New Opportunity</button>
+    </section>
+
+    <!-- Create Opportunity Modal -->
+    <div id="createOppModal" class="modal hidden">
+      <div class="modal-content">
+        <span class="modal-close" onclick="document.getElementById('createOppModal').classList.add('hidden')">&times;</span>
+        <h2>Create New Opportunity</h2>
+        <form id="createOppForm">
+          <div class="form-group">
+            <label for="oppTitle">Job Title *</label>
+            <input type="text" id="oppTitle" name="title" required placeholder="e.g., Backend Developer Intern" />
+          </div>
+          
+          <div class="form-group">
+            <label for="oppCompany">Company Name *</label>
+            <input type="text" id="oppCompany" name="company" required placeholder="e.g., Tech Corp" />
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="oppType">Type *</label>
+              <select id="oppType" name="type" required>
+                <option value="">Select Type</option>
+                <option value="internship">Internship</option>
+                <option value="hackathon">Hackathon</option>
+                <option value="fulltime">Full-time</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="oppLocation">Location *</label>
+              <select id="oppLocation" name="location" required>
+                <option value="">Select Location</option>
+                <option value="remote">Remote</option>
+                <option value="onsite">On-site</option>
+                <option value="hybrid">Hybrid</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="oppDuration">Duration</label>
+              <input type="text" id="oppDuration" name="duration" placeholder="e.g., 3 months" />
+            </div>
+            
+            <div class="form-group">
+              <label for="oppPay">Compensation</label>
+              <input type="text" id="oppPay" name="pay" placeholder="e.g., $15/hour or Unpaid" />
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="oppDescription">Description *</label>
+            <textarea id="oppDescription" name="description" required rows="5" 
+              placeholder="Describe the role, responsibilities, and what the candidate will work on..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="oppRequirements">Requirements</label>
+            <textarea id="oppRequirements" name="requirements" rows="4" 
+              placeholder="List required skills, qualifications, and experience..."></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn secondary" onclick="document.getElementById('createOppModal').classList.add('hidden')">Cancel</button>
+            <button type="submit" class="btn primary">Create Opportunity</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- My Opportunities Section -->
+    <section class="recruiter-section">
+      <h2>My Posted Opportunities</h2>
+      <div id="myOpportunitiesList" class="opportunities-grid">
+        <div class="loading">Loading your opportunities...</div>
+      </div>
+    </section>
+
+    <!-- Applications Management Section -->
+    <section class="recruiter-section" id="applicationsSection" style="display: none;">
+      <div class="section-header">
+        <h2>Applications for: <span id="selectedOppTitle"></span></h2>
+        <button class="btn secondary" onclick="window.app.closeApplicationsView()">Back to Opportunities</button>
+      </div>
+      <div id="applicationsList" class="applications-list">
+        <div class="loading">Loading applications...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> HackathonInternshipPortal</small>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.textContent = '🌙 Dark Mode';
+      }
+      localStorage.setItem('theme', mode);
+    }
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+    setTheme(localStorage.getItem('theme') || 'light');
+
+    // Create opportunity button
+    document.getElementById('createOppBtn').addEventListener('click', () => {
+      document.getElementById('createOppModal').classList.remove('hidden');
+    });
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (window.app && window.app.logout) {
+        window.app.logout();
+      }
+    });
+  </script>
+</body>
+</html>

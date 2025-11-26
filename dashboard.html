@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard — Hackathon Internship Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/script.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">HackathonInternshipPortal</a>
+      <nav class="main-nav">
+        <a href="opportunities.html">Opportunities</a>
+        <a href="#" id="logoutLink">Logout</a>
+        <a href="help.html">Help</a>
+      </nav>
+      <button id="themeToggle" class="btn secondary" style="margin-left:1rem;">🌙 Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="container dashboard">
+    <div class="grid-2">
+      <section class="card">
+        <h2>Your Profile</h2>
+        <div id="profileSummary">
+          <!-- Filled dynamically by js/script.js after fetching /api/user/profile -->
+          <p class="muted">Loading profile…</p>
+        </div>
+        <a class="btn" href="#" id="editProfileBtn">Edit profile</a>
+      </section>
+
+      <section class="card">
+        <h2>Applications</h2>
+        <div id="applicationsList">
+          <p class="muted">Loading applications…</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="card margin-top">
+      <h2>Recommended Opportunities</h2>
+      <div id="recommendedList" class="opportunities-grid">
+        <p class="muted">Loading recommendations…</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> HackathonInternshipPortal</small>
+    </div>
+  </footer>
+
+  <!-- Edit Profile Modal -->
+  <div id="editProfileModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <h2>Edit Profile</h2>
+      <form id="editProfileForm">
+        <label>
+          Name
+          <input type="text" name="name" id="profileName" required>
+        </label>
+        <label>
+          Bio
+          <textarea name="bio" id="profileBio" rows="4"></textarea>
+        </label>
+        <label>
+          Skills (comma separated)
+          <input type="text" name="skills" id="profileSkills" placeholder="e.g. JavaScript, Python, React">
+        </label>
+        
+        <div class="form-group">
+          <label>Resume</label>
+          <div id="resumeSection">
+            <p id="currentResume" style="margin-bottom: 0.5rem; color: var(--muted);"></p>
+            <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" style="margin-bottom: 0.5rem;">
+            <button type="button" id="uploadResumeBtn" class="btn small secondary">Upload Resume</button>
+            <p style="font-size: 0.85rem; color: var(--muted);">Accepted formats: PDF, DOC, DOCX (Max 5MB)</p>
+          </div>
+        </label>
+        
+        <label>
+          Profile Picture URL
+          <input type="url" name="profile_picture" id="profilePicture" placeholder="https://...">
+        </label>
+        <button type="submit" class="btn">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Theme toggle logic
+    const themeToggle = document.getElementById('themeToggle');
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.textContent = '🌙 Dark Mode';
+      }
+      localStorage.setItem('theme', mode);
+    }
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+    setTheme(localStorage.getItem('theme') || 'light');
+
+    // Dashboard behaviors use the global app object (js/script.js)
+    document.getElementById('logoutLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.app && typeof window.app.logout === 'function') window.app.logout();
+    });
+
+    document.getElementById('editProfileBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      // Basic inline modal or navigation could be implemented by app
+      if (window.app && typeof window.app.openEditProfile === 'function') window.app.openEditProfile();
+    });
+
+    // On load try to populate dashboard
+    setTimeout(() => {
+      if (window.app && typeof window.app.initDashboard === 'function') {
+        console.log('Initializing dashboard...');
+        window.app.initDashboard();
+      } else {
+        console.error('window.app.initDashboard not found');
+      }
+    }, 100);
+  </script>
+</body>
+</html>

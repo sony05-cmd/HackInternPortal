@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Opportunities — Hackathon Internship Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/script.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">HackathonInternshipPortal</a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="help.html">Help</a>
+      </nav>
+      <button id="themeToggle" class="btn secondary" style="margin-left:1rem;">🌙 Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="search-bar">
+      <input id="searchInput" placeholder="Search by title, company, or skills..." />
+      <select id="filterType">
+        <option value="">All Types</option>
+        <option value="internship">Internship</option>
+        <option value="hackathon">Hackathon</option>
+        <option value="fulltime">Full-time</option>
+      </select>
+      <select id="filterLocation">
+        <option value="">All Locations</option>
+        <option value="remote">Remote</option>
+        <option value="onsite">On-site</option>
+        <option value="hybrid">Hybrid</option>
+      </select>
+      <button id="searchBtn" class="btn">Search</button>
+      <button id="clearBtn" class="btn secondary">Clear</button>
+    </section>
+
+    <section id="opportunitiesList" class="opportunities-grid" aria-live="polite">
+      <!-- Opportunities will be loaded dynamically from backend -->
+      <div class="loading">Loading opportunities...</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> HackathonInternshipPortal</small>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Theme toggle logic
+    const themeToggle = document.getElementById('themeToggle');
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.textContent = '🌙 Dark Mode';
+      }
+      localStorage.setItem('theme', mode);
+    }
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+    setTheme(localStorage.getItem('theme') || 'light');
+
+    // Search and filter functionality
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      if (window.app && typeof window.app.searchOpportunities === 'function') {
+        const q = document.getElementById('searchInput').value;
+        const loc = document.getElementById('filterLocation').value;
+        const type = document.getElementById('filterType').value;
+        window.app.searchOpportunities({ q, loc, type });
+      }
+    });
+
+    // Clear filters
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('filterLocation').value = '';
+      document.getElementById('filterType').value = '';
+      if (window.app && typeof window.app.searchOpportunities === 'function') {
+        window.app.searchOpportunities({});
+      }
+    });
+
+    // Search on Enter key
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('searchBtn').click();
+      }
+    });
+  </script>
+</body>
+</html>

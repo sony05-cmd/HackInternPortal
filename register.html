@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Register — Hackathon Internship Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/script.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">HackathonInternshipPortal</a>
+      <nav class="main-nav">
+        <a href="opportunities.html">Opportunities</a>
+        <a href="login.html">Login</a>
+        <a href="help.html">Help</a>
+      </nav>
+      <button id="themeToggle" class="btn secondary" style="margin-left:1rem;">🌙 Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="container auth-page">
+    <div class="card auth-card">
+      <h2>Create an account</h2>
+      <form id="registerForm" method="post" action="/api/auth/register" autocomplete="on">
+        <label for="fullname">Full name</label>
+        <input id="fullname" name="name" type="text" required placeholder="Your name" />
+
+        <label for="regEmail">Email</label>
+        <input id="regEmail" name="email" type="email" required placeholder="you@example.com" />
+
+        <label for="regPassword">Password</label>
+        <input id="regPassword" name="password" type="password" minlength="8" required placeholder="At least 8 characters" />
+
+        <label for="role">I am a</label>
+        <select id="role" name="role" required onchange="toggleInviteCode()">
+          <option value="">Select role</option>
+          <option value="student">Student / Applicant</option>
+          <option value="recruiter">Recruiter / Organizer</option>
+        </select>
+        <div id="inviteCodeRow" style="display:none;">
+          <label for="inviteCode">Recruiter Invite Code</label>
+          <input id="inviteCode" name="inviteCode" type="text" placeholder="Enter invite code" />
+        </div>
+
+        <button class="btn" type="submit">Register</button>
+
+        <p class="muted">
+          Already registered? <a href="login.html">Login</a>
+        </p>
+
+        <div id="registerMessage" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> HackathonInternshipPortal</small>
+    </div>
+  </footer>
+
+  
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Theme toggle logic
+    const themeToggle = document.getElementById('themeToggle');
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.textContent = '🌙 Dark Mode';
+      }
+      localStorage.setItem('theme', mode);
+    }
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+    setTheme(localStorage.getItem('theme') || 'light');
+
+    function toggleInviteCode() {
+      var role = document.getElementById('role').value;
+      document.getElementById('inviteCodeRow').style.display = (role === 'recruiter') ? 'block' : 'none';
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      if (window.app && typeof window.app.handleRegister === 'function') {
+        e.preventDefault();
+        const role = document.getElementById('role').value;
+        if (role === 'recruiter') {
+          const code = document.getElementById('inviteCode').value.trim();
+          if (code !== 'ADMIN2025') {
+            document.getElementById('registerMessage').textContent = 'Invalid recruiter invite code.';
+            document.getElementById('registerMessage').style.color = 'red';
+            return;
+          }
+        }
+        await window.app.handleRegister(new FormData(e.target));
+        // Redirect based on selected role
+        if (role === 'student') {
+          window.location.href = 'dashboard.html';
+        } else if (role === 'recruiter') {
+          window.location.href = 'admin_dashboard.html';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
