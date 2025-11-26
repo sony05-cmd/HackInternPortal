@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Opportunities — Hackathon Internship Portal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/script.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">HackathonInternshipPortal</a>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="help.html">Help</a>
+      </nav>
+      <button id="themeToggle" class="btn secondary" style="margin-left:1rem;">🌙 Dark Mode</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="search-bar">
+      <input id="searchInput" placeholder="Search by role, company, skills..." />
+      <select id="filterLocation">
+        <option value="">All locations</option>
+        <option value="remote">Remote</option>
+        <option value="onsite">On-site</option>
+      </select>
+      <button id="searchBtn" class="btn">Search</button>
+    </section>
+
+    <section id="opportunitiesList" class="opportunities-grid" aria-live="polite">
+      <!-- Example static cards (the real data should be loaded from backend /api/opportunities) -->
+      <article class="opp-card">
+        <h3>Frontend Intern — Acme Labs</h3>
+        <p class="meta">Remote · 3 months · Paid</p>
+        <p class="desc">Build UI components & contribute to open-source hackathon tools.</p>
+        <div class="card-actions">
+          <a class="btn small" href="opportunity.html?id=1">Details</a>
+          <button class="btn small outline" data-opp-id="1" onclick="window.app && window.app.applyToOpp?.(1)">Apply</button>
+        </div>
+      </article>
+
+      <article class="opp-card">
+        <h3>Backend Intern — DataMesh</h3>
+        <p class="meta">On-site (Bengaluru) · 3 months · Stipend</p>
+        <p class="desc">Work on APIs and scalable ingestion pipelines for hackathon analytics.</p>
+        <div class="card-actions">
+          <a class="btn small" href="opportunity.html?id=2">Details</a>
+          <button class="btn small outline" data-opp-id="2" onclick="window.app && window.app.applyToOpp?.(2)">Apply</button>
+        </div>
+      </article>
+
+      <!-- Placeholder note when there are no opportunities -->
+      <div id="noOpps" class="muted hidden">No opportunities found. Try different filters.</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> HackathonInternshipPortal</small>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Theme toggle logic
+    const themeToggle = document.getElementById('themeToggle');
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.textContent = '🌙 Dark Mode';
+      }
+      localStorage.setItem('theme', mode);
+    }
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+    setTheme(localStorage.getItem('theme') || 'light');
+
+    // Hook simple search to app if present
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      if (window.app && typeof window.app.searchOpportunities === 'function') {
+        const q = document.getElementById('searchInput').value;
+        const loc = document.getElementById('filterLocation').value;
+        window.app.searchOpportunities({ q, loc });
+      }
+    });
+  </script>
+</body>
+</html>
